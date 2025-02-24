@@ -66,7 +66,7 @@ def process_request():
 
             # Extract user message and send to chatbot
             user_message = json_data.get("message", "Summarize the document.")  # Default query
-            bot_response = chat_with_bot(user_message)
+            bot_response = chat_with_bot(user_message,True)
 
             return jsonify({
                 "message": "PDF uploaded successfully",
@@ -135,7 +135,7 @@ def process_request():
             }), 200
 
     # **Chatbot response for other queries**
-    bot_response = chat_with_bot(user_message)
+    bot_response = chat_with_bot(user_message,False)
     return jsonify({
         "status": "Message received",
         "originalMessage": user_message,
