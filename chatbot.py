@@ -8,7 +8,10 @@ def chat_with_bot(user_message, use_knowledge_base=True):
     model_name = "llama3.2"
 
     if use_knowledge_base:
+        print('before')
         relevant_knowledge = retrieve_relevant_chunks(user_message)
+        print('after')
+        print(relevant_knowledge)
 
         # If no relevant information is found, fall back to general answering
         if not relevant_knowledge or relevant_knowledge == "No relevant information found.":
@@ -38,7 +41,8 @@ def chat_with_bot(user_message, use_knowledge_base=True):
 
     try:
         response = ollama.chat(model=model_name, messages=[{"role": "user", "content": prompt}])
-        return response.get("message", "I couldn't generate a response.")
+        print(response.get("message").get("content"))
+        return response.get("message").get("content")
     
     except Exception as e:
         return f"Error while querying LLaMA: {str(e)}"

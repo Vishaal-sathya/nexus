@@ -85,5 +85,116 @@
             "PyTorch",
             "TensorFlow"
         ]
+    },
+    {
+        "id": 1,
+        "domain": "blockchain",
+        "technology": "Artificial Intelligence",
+        "news": "Private equity giant Apollo is bringing a red-hot corner of the market to the blockchain - Private credit has boomed in recent years. Apollo's tokenized fund offers a way for investors to buy in via the blockchain.",
+        "techStack": [
+            "Consensus Mechanisms",
+            "PyTorch",
+            "LLMs",
+            "Layer 2 Scaling",
+            "TensorFlow",
+            "Ethereum",
+            "Hyperledger",
+            "Reinforcement Learning"
+        ]
+    },
+    {
+        "id": 2,
+        "domain": "blockchain",
+        "technology": "Cloud Computing",
+        "news": "The Game Company raises $10M on blockchain-based cloud gaming - The Game Company, a Dubai gaming startup, has raised $10 million to build the next cloud gaminginfrastructure based on blockchain technology.",
+        "techStack": [
+            "Consensus Mechanisms",
+            "Docker",
+            "Hyperledger",
+            "Kubernetes",
+            "PyTorch",
+            "Layer 2 Scaling",
+            "Ethereum",
+            "TensorFlow",
+            "Cloud Security",
+            "LLMs",
+            "Serverless",
+            "Reinforcement Learning"
+        ]
+    },
+    {
+        "id": 3,
+        "domain": "blockchain",
+        "technology": "Artificial Intelligence",
+        "news": "Sony\u2019s blockchain lab launches Soneium Conquest to onboard creators and devs - Sony Block Solutions Labs is launching Soneium Conquest as a way to onboard creators, developers, and newcomers to its Soneium blockchain.",
+        "techStack": [
+            "Consensus Mechanisms",
+            "PyTorch",
+            "LLMs",
+            "Layer 2 Scaling",
+            "TensorFlow",
+            "Ethereum",
+            "Hyperledger",
+            "Reinforcement Learning"
+        ]
+    },
+    {
+        "id": 4,
+        "domain": "blockchain",
+        "technology": "Artificial Intelligence",
+        "news": "Incention bridges Hollywood and AI with debut project by David S. Goyer on Story platform - Incention is launching a platform to bring AI and blockchain to Hollywood,\u00a0and it is working with Hollywood writer David S. Goyer.",
+        "techStack": [
+            "Consensus Mechanisms",
+            "PyTorch",
+            "LLMs",
+            "Layer 2 Scaling",
+            "TensorFlow",
+            "Ethereum",
+            "Hyperledger",
+            "Reinforcement Learning"
+        ]
+    },
+    {
+        "id": 5,
+        "domain": "blockchain",
+        "technology": "Artificial Intelligence",
+        "news": "A startup building an app to prove you're human and not AI just raised $7.3 million - The San Francisco-based startup will use the funding to develop its tools for verifying human and AI identities.",
+        "techStack": [
+            "Reinforcement Learning",
+            "TensorFlow",
+            "PyTorch",
+            "LLMs"
+        ]
+    },
+    {
+        "id": 6,
+        "domain": "blockchain",
+        "technology": "Artificial Intelligence",
+        "news": "Unit Network raises $18M for decentralized platform enabling real-world and digital asset trading - Unit\u00a0Network, a decentralized financial ecosystem enabling tradING of real-world and digital assets through tokenization, has raised $18 million.",
+        "techStack": [
+            "Reinforcement Learning",
+            "TensorFlow",
+            "PyTorch",
+            "LLMs"
+        ]
+    },
+    {
+        "id": 7,
+        "domain": "blockchain",
+        "technology": "Artificial Intelligence",
+        "news": "PIN AI Launches Mobile App Letting You Make Your Own Personalized, Private AI Model - An anonymous reader quotes a report from VentureBeat: A new startup PIN AI (not to be confused with the poorly reviewed hardware device the AI Pin by Humane) has emerged from stealth to launch its first mobile app, which lets a user select an underlying open-\u2026",
+        "techStack": [
+            "Reinforcement Learning",
+            "TensorFlow",
+            "PyTorch",
+            "LLMs"
+        ]
+    },
+    {
+        "id": 8,
+        "domain": "blockchain",
+        "technology": "General Technology",
+        "news": "Chris Anderson Is Giving TED Away to Whoever Has the Best Idea for Its Future - In an exclusive interview with WIRED, the British entrepreneur shares why it\u2019s time to move on from TED.",
+        "techStack": []
     }
 ]

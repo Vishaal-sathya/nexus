@@ -4,7 +4,7 @@ import json
 import os
 import re
 
-from news import fetch_and_get_news
+from news import fetch_and_update_news
 from knowledge_base import create_knowledge_base
 from chatbot import chat_with_bot
 
@@ -16,7 +16,7 @@ with open("tech_category_mapping.json", "r") as file:
     DATA_JSON = json.load(file)
 
 # Keywords for skills and news detection
-INTENT_KEYWORDS = ["skills", "technologies", "tech stack", "popular", "trending", "latest", "current"]
+INTENT_KEYWORDS = ["skills", "technologies", "tech stack", "popular", "trending", "latest", "current", 'techstack']
 NEWS_KEYWORDS = ["news", "updates", "latest news", "trending news", "current affairs"]
 
 UPLOAD_FOLDER = "uploads"
@@ -46,9 +46,11 @@ def extract_domain(user_message):
 
 @app.route('/process', methods=['POST'])
 def process_request():
+    
     """Handles PDF upload, extracts knowledge, and answers user query."""
 
     if "file" in request.files:
+        print(1)
         file = request.files["file"]
         json_data = request.form.get("json")  # Extract JSON as string
 
@@ -67,11 +69,13 @@ def process_request():
             # Extract user message and send to chatbot
             user_message = json_data.get("message", "Summarize the document.")  # Default query
             bot_response = chat_with_bot(user_message, use_knowledge_base=True)
+            print('#########################################################')
+            print(bot_response)
 
             return jsonify({
                 "message": "PDF uploaded successfully",
                 "knowledge_base_status": knowledge_base_message,
-                "data": bot_response  # Chatbot response using knowledge base
+                "data": str(bot_response).replace("**", " ")  # Chatbot response using knowledge base
             }), 200
 
         return jsonify({"error": "Invalid file format. Only PDFs are allowed"}), 400
@@ -87,19 +91,20 @@ def process_request():
 
     # Handle request for tech skills
     if user_message.strip() == '/tech':
-        unique_values = set()
-        for values in DATA_JSON.values():
-            unique_values.update(values)
+        print(2)
+        unique_values = set(DATA_JSON.values())
         return jsonify({
             "status": "Message received",
             "originalMessage": user_message,
             "data": list(unique_values)
         }), 200
 
-    elif detect_news_intent(user_message):
+    elif detect_news_intent(user_message) or detect_intent(user_message):
+        print(3)
         domain = extract_domain(user_message)
         if domain:
-            news_articles = fetch_and_get_news(domain)
+            
+            news_articles = fetch_and_update_news(domain)
             return jsonify({
                     "status": "Message received",
                     "originalMessage": user_message,
@@ -115,33 +120,22 @@ def process_request():
                 "message": "I couldn't find the domain you're asking about."
             }), 200
 
-    elif detect_intent(user_message):
-        domain = extract_domain(user_message)
-        if domain:
-            return jsonify({
-                    "status": "Message received",
-                    "originalMessage": user_message,
-                    "data": {
-                        "domain": domain,
-                        "skills": DATA_JSON.get(domain, []) if domain else []
-                    }
-                }), 200
-
-        else:
-            return jsonify({
-                "status": "Message received",
-                "originalMessage": user_message,
-                "message": "I couldn't find the domain you're asking about."
-            }), 200
+    
 
     # **Chatbot response for other queries**
+    print(5)
     bot_response = chat_with_bot(user_message, use_knowledge_base=False)
     return jsonify({
         "status": "Message received",
-        "originalMessage": user_message,
-        "data": bot_response
+        "data": str(bot_response).replace("**", " ")
     }), 200
 
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8067, debug=True)
+    # knowledge_base_message = create_knowledge_base()
+    # #         # Extract user message and send to chatbot
+    # user_message = "Summarize the document."  # Default query
+    # bot_response = chat_with_bot(user_message, use_knowledge_base=True)
+    # print(bot_response)
+    

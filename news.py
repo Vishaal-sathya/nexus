@@ -48,10 +48,10 @@ def infer_tech_stack(text):
     return list(detected_stacks)
 
 
-def fetch_and_get_news(domain):
-    """Fetches, processes, saves, and retrieves news for a given domain."""
+def fetch_and_update_news(filter_technology=None):
+    """Fetches tech news, checks for duplicates, updates news.json, and returns filtered results."""
     params = {
-        "q": domain,
+        "q": "technology",
         "language": "en",
         "apiKey": API_KEY,
         "pageSize": 10
@@ -60,53 +60,56 @@ def fetch_and_get_news(domain):
     response = requests.get(URL, params=params)
     data = response.json()
 
-    if data.get("status") == "ok":
-        articles = data.get("articles", [])
-        if not articles:
-            return {"message": f"No news found for {domain}."}
-
-        news_list = []
-        for i, article in enumerate(articles, 1):
-            title = article["title"]
-            description = article.get("description", "")
-            news_text = f"{title} - {description}"  # Combine title and description into a single string
-            tech_stack = infer_tech_stack(news_text)
-            technology = classify_technology(news_text)
-
-            news_list.append({
-                "id": i,
-                "domain": domain,
-                "technology": technology,
-                "news": news_text,
-                "techStack": tech_stack
-            })
-
-        # Load existing data
-        if os.path.exists(NEWS_FILE):
-            with open(NEWS_FILE, "r") as file:
-                try:
-                    existing_data = json.load(file)
-                except json.JSONDecodeError:
-                    existing_data = []
-        else:
-            existing_data = []
-
-        # Append new data
-        existing_data.extend(news_list)
-
-        # Save to file
-        with open(NEWS_FILE, "w") as file:
-            json.dump(existing_data, file, indent=4)
-
-        # Return all news related to the domain
-        return [news for news in existing_data if news["domain"] == domain]
-
-    else:
+    if data.get("status") != "ok":
         return {"error": data.get("message")}
 
+    articles = data.get("articles", [])
+    if not articles:
+        return {"message": "No tech news found."}
 
-# Example Usage:
+    # Load existing news data
+    if os.path.exists(NEWS_FILE):
+        with open(NEWS_FILE, "r") as file:
+            try:
+                existing_news = json.load(file)
+            except json.JSONDecodeError:
+                existing_news = []
+    else:
+        existing_news = []
+
+    existing_titles = {news_item["news"] for news_item in existing_news}  # Use news text as unique identifier
+    new_news = []
+
+    for article in articles:
+        title = article["title"]
+        description = article.get("description", "")
+        news_text = f"{title} - {description}"  # Single string format
+        if news_text in existing_titles:
+            continue  # Skip if already exists
+
+        tech_stack = infer_tech_stack(news_text)
+        technology = classify_technology(news_text)
+
+        new_news.append({
+            "technology": technology,
+            "news": news_text,
+            "techStack": tech_stack
+        })
+
+    if new_news:
+        existing_news.extend(new_news)
+        with open(NEWS_FILE, "w") as file:
+            json.dump(existing_news, file, indent=4)
+
+    # Filter the results if a specific technology category is requested
+    if filter_technology:
+        filtered_news = [item for item in existing_news if item["technology"].lower() == filter_technology.lower()]
+        return {"filtered_news": filtered_news}
+    
+    return {"message": f"Added {len(new_news)} new articles.", "new_articles": new_news}
+
+
 if __name__ == "__main__":
-    domain = "technology"
-    news = fetch_and_get_news(domain)
-    print(json.dumps(news, indent=4))
+    tech_filter = "Artificial Intelligence"  # Change this to any tech category you want
+    result = fetch_and_update_news(tech_filter)
+    print(result)
