@@ -1,0 +1,7 @@
+spacy
+ollama
+langchain
+PyPDF2
+flask
+flask-cors
+chromadb

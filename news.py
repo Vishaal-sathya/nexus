@@ -5,6 +5,7 @@ import os
 
 API_KEY = "7ac8add64a304399ae58c38a4005d6e7"
 URL = "https://newsapi.org/v2/everything"
+NEWS_FILE = "news.json"
 
 # Load tech keywords
 with open("tech_keywords.json", "r") as file:
@@ -47,10 +48,10 @@ def infer_tech_stack(text):
     return list(detected_stacks)
 
 
-def get_tech_news():
-    """Fetches recent tech-related news from NewsAPI and returns a structured JSON response."""
+def fetch_and_get_news(domain):
+    """Fetches, processes, saves, and retrieves news for a given domain."""
     params = {
-        "q": "technology",
+        "q": domain,
         "language": "en",
         "apiKey": API_KEY,
         "pageSize": 10
@@ -62,7 +63,7 @@ def get_tech_news():
     if data.get("status") == "ok":
         articles = data.get("articles", [])
         if not articles:
-            return {"message": "No tech news found."}
+            return {"message": f"No news found for {domain}."}
 
         news_list = []
         for i, article in enumerate(articles, 1):
@@ -74,25 +75,38 @@ def get_tech_news():
 
             news_list.append({
                 "id": i,
+                "domain": domain,
                 "technology": technology,
-                "news": news_text,  # Single string format
+                "news": news_text,
                 "techStack": tech_stack
             })
 
-        return news_list
+        # Load existing data
+        if os.path.exists(NEWS_FILE):
+            with open(NEWS_FILE, "r") as file:
+                try:
+                    existing_data = json.load(file)
+                except json.JSONDecodeError:
+                    existing_data = []
+        else:
+            existing_data = []
+
+        # Append new data
+        existing_data.extend(news_list)
+
+        # Save to file
+        with open(NEWS_FILE, "w") as file:
+            json.dump(existing_data, file, indent=4)
+
+        # Return all news related to the domain
+        return [news for news in existing_data if news["domain"] == domain]
 
     else:
         return {"error": data.get("message")}
 
 
+# Example Usage:
 if __name__ == "__main__":
-    news_file = "news.json"
-
-    # Check if the file already exists
-    if not os.path.exists(news_file):
-        news_json = get_tech_news()
-        with open(news_file, "w") as file:
-            json.dump(news_json, file, indent=4)
-        print(f"News saved to {news_file}")
-    else:
-        print(f"{news_file} already exists. Skipping save.")
+    domain = "technology"
+    news = fetch_and_get_news(domain)
+    print(json.dumps(news, indent=4))
