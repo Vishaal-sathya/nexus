@@ -1,18 +1,14 @@
 import os
-import json
 import PyPDF2
-import chromadb
+import faiss
+import numpy as np
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.embeddings import OllamaEmbeddings
-from langchain.vectorstores import Chroma
+import pickle
 
 UPLOAD_FOLDER = "uploads"
 PDF_PATH = os.path.join(UPLOAD_FOLDER, "base.pdf")
-VECTOR_DB_PATH = "vector_store"
-
-# Initialize the vector database
-chroma_client = chromadb.PersistentClient(VECTOR_DB_PATH)
-collection = chroma_client.get_or_create_collection(name="pdf_knowledge")
+VECTOR_DB_PATH = "vector_store/faiss_index.pkl"
 
 # Initialize embeddings model
 embeddings = OllamaEmbeddings(model="llama3.2")
@@ -20,7 +16,7 @@ embeddings = OllamaEmbeddings(model="llama3.2")
 
 def create_knowledge_base():
     """
-    Extracts text from a PDF, splits it into chunks, and stores them in a vector database.
+    Extracts text from a PDF, splits it into chunks, and stores them in a FAISS vector database.
     """
     extracted_text = ""
 
@@ -36,28 +32,41 @@ def create_knowledge_base():
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)
     text_chunks = text_splitter.split_text(extracted_text)
 
-    # **Clear existing chunks before adding new ones**
-    collection.delete(ids=[str(i) for i in range(len(text_chunks))])
+    # Convert chunks to embeddings
+    chunk_embeddings = np.array([embeddings.embed(chunk) for chunk in text_chunks]).astype("float32")
 
-    # Store chunks in vector database with embeddings
-    for idx, chunk in enumerate(text_chunks):
-        embedding = embeddings.embed(chunk)  # Convert chunk to vector
-        collection.add(ids=[str(idx)], documents=[chunk], embeddings=[embedding])
+    # Create FAISS index
+    d = chunk_embeddings.shape[1]  # Dimensionality of embeddings
+    index = faiss.IndexFlatL2(d)  # L2 (Euclidean distance) index
+    index.add(chunk_embeddings)  # Add embeddings to the index
+
+    # Save index and text chunks
+    with open(VECTOR_DB_PATH, "wb") as f:
+        pickle.dump({"index": index, "chunks": text_chunks}, f)
 
     return f"Successfully indexed {len(text_chunks)} chunks of text."
 
 
-def retrieve_relevant_chunks(query):
+def retrieve_relevant_chunks(query, top_k=5):
     """
-    Retrieves relevant text chunks from the vector database based on user query.
+    Retrieves relevant text chunks from the FAISS vector database based on user query.
     """
-    if not collection.count():
+    if not os.path.exists(VECTOR_DB_PATH):
         return "No knowledge base found. Please upload a PDF first."
 
-    results = collection.query(query_texts=[query], n_results=5)
+    # Load FAISS index and text chunks
+    with open(VECTOR_DB_PATH, "rb") as f:
+        data = pickle.load(f)
+        index = data["index"]
+        text_chunks = data["chunks"]
 
-    if not results["documents"] or len(results["documents"][0]) == 0:
-        return "No relevant information found."
+    # Convert query to vector
+    query_embedding = np.array([embeddings.embed(query)]).astype("float32")
 
-    relevant_chunks = results["documents"][0]
-    return "\n".join(relevant_chunks)
+    # Search in FAISS index
+    _, indices = index.search(query_embedding, top_k)
+
+    # Retrieve matching text chunks
+    relevant_chunks = [text_chunks[i] for i in indices[0] if i < len(text_chunks)]
+    
+    return "\n".join(relevant_chunks) if relevant_chunks else "No relevant information found."
