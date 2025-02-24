@@ -132,10 +132,10 @@ def process_request():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8067, debug=True)
+    # app.run(host="0.0.0.0", port=8067, debug=True)
     # knowledge_base_message = create_knowledge_base()
     # #         # Extract user message and send to chatbot
-    # user_message = "Summarize the document."  # Default query
-    # bot_response = chat_with_bot(user_message, use_knowledge_base=True)
-    # print(bot_response)
+    user_message = "Summarize the document."  # Default query
+    bot_response = chat_with_bot(user_message, use_knowledge_base=True)
+    print(bot_response)
     

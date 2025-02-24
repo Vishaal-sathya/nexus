@@ -1,9 +1,14 @@
 import ollama
 from knowledge_base import retrieve_relevant_chunks
 
+import ollama
+import re
+from knowledge_base import retrieve_relevant_chunks
+
 def chat_with_bot(user_message, use_knowledge_base=True):
     """
     Queries LLaMA 3.2 with retrieved knowledge chunks.
+    Extracts the source and ensures it is included in the response.
     """
     model_name = "llama3.2"
 
@@ -24,14 +29,14 @@ def chat_with_bot(user_message, use_knowledge_base=True):
         else:
             prompt = f"""
             You are an AI assistant with a knowledge base retrieved from a PDF.
-            Here are the most relevant excerpts:
+            Here are the most relevant excerpts taken from knowledge_base.pdf:
 
             {relevant_knowledge}
 
             The user asked:
             {user_message}
 
-            Provide a concise and accurate response based on the retrieved knowledge.
+            Provide a concise and accurate response based on the retrieved knowledge and cite the source for your response.
             """
     else:
         prompt = f"""
@@ -41,8 +46,18 @@ def chat_with_bot(user_message, use_knowledge_base=True):
 
     try:
         response = ollama.chat(model=model_name, messages=[{"role": "user", "content": prompt}])
-        print(response.get("message").get("content"))
-        return response.get("message").get("content")
-    
+        response_text = response.get("message", {}).get("content", "")
+
+        # Extract everything before the last occurrence of "source"
+        match = re.search(r"(.+)\bsource\b", response_text, re.IGNORECASE)
+        
+        if match:
+            cleaned_response = match.group(1).strip()
+            return cleaned_response
+        else:
+            print("Source not found, re-querying the model...")
+            return chat_with_bot(user_message, use_knowledge_base)
+
     except Exception as e:
         return f"Error while querying LLaMA: {str(e)}"
+
