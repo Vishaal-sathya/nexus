@@ -59,11 +59,14 @@ The system prevents hallucinations in the AI's responses by embedding only verif
 - Real-time job and internship matching.
 - Deeper skill gap analysis using AI.
 
+## Landing Page
+![WhatsApp Image 2025-02-25 at 12 16 59_5ed89f73](https://github.com/user-attachments/assets/eab9d195-b827-48c9-b29d-c7a86215c515)
+
 ## 📦 Installation
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/nexus.git
+git clone https://github.com/vishaal-sathya/nexus.git
 ```
 
 2. Navigate to the project folder:
