@@ -102,7 +102,9 @@ def fetch_and_update_news(filter_technology=None):
             json.dump(existing_news, file, indent=4)
 
     # Filter the results if a specific technology category is requested
+    
     if filter_technology:
+        print(filter_technology)
         filtered_news = [item for item in existing_news if item["technology"].lower() == filter_technology.lower()]
         return {"filtered_news": filtered_news}
     
