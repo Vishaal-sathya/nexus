@@ -1,0 +1,3 @@
+-> install all libs
+-> just run main.py
+-> :D 
