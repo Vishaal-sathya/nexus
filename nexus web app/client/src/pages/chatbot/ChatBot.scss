@@ -1,0 +1,351 @@
+.gemini-chat-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background: linear-gradient(135deg, #f9f9f9, #ececec);
+  min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
+
+  /* Improved scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(242, 101, 34, 0.8); /* More vibrant orange */
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: rgba(255, 247, 240, 0.7); /* Light orange tint */
+    border-radius: 10px;
+  }
+
+  /* Enhanced tech response component */
+  .tech-response {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(15px);
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(242, 101, 34, 0.1);
+    color: #333;
+    max-width: 450px;
+    margin: 15px 0;
+    border-left: 4px solid #f26522;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .tech-response:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(242, 101, 34, 0.15);
+  }
+
+  .tech-response h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #f26522;
+    border-bottom: 2px solid rgba(242, 101, 34, 0.2);
+    padding-bottom: 8px;
+  }
+  
+  .tech-response ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .tech-response li {
+    padding: 10px 12px;
+    font-size: 16px;
+    border-left: 3px solid #f26522;
+    margin-bottom: 10px;
+    transition: all 0.3s ease-in-out;
+    background: rgba(242, 101, 34, 0.05);
+    border-radius: 0 8px 8px 0;
+  }
+  
+  .tech-response li:hover {
+    border-left: 5px solid #f26522;
+    transform: translateX(5px);
+    background: rgba(242, 101, 34, 0.1);
+  }
+
+  /* Improved news response component */
+  .news-response {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(15px);
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(242, 101, 34, 0.1);
+    margin-top: 25px;
+    color: #333;
+    font-family: 'Poppins', sans-serif;
+    border-top: 4px solid #f26522;
+    width: 100%;
+    max-width: 600px;
+  }
+
+  .news-response h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #f26522;
+    margin-bottom: 16px;
+    letter-spacing: 0.5px;
+  }
+
+  .news-response ul {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 15px;
+  }
+
+  .news-response .news-item {
+    background: #fff;
+    padding: 18px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    border-left: 3px solid #f26522;
+  }
+
+  .news-response .news-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(242, 101, 34, 0.15);
+  }
+
+  .news-response .news-item strong {
+    font-size: 1.1rem;
+    color: #333;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .news-response .news-item p {
+    font-size: 0.95rem;
+    color: #555;
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+
+  .news-response .news-item b {
+    color: #f26522;
+  }
+
+  /* Improved chat history container */
+  .chat-history {
+    width: 70%;
+    min-height: 450px;
+    max-height: 600px;
+    overflow-y: auto;
+    margin-bottom: 25px;
+    border-radius: 20px;
+    padding: 20px;
+    backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(242, 101, 34, 0.1);
+  }
+
+  /* Enhanced message styling */
+  .message {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 18px;
+  }
+
+  .message.user {
+    justify-content: flex-end;
+  }
+
+  .message.bot {
+    justify-content: flex-start;
+  }
+
+  .message.receiver {
+    justify-content: center;
+  }
+
+  /* Improved avatar styling */
+  .avatar {
+    width: 40px;
+    height: 40px;
+    margin-right: 12px;
+    border-radius: 50%;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    border: 2px solid #fff;
+  }
+
+  /* Enhanced message bubbles */
+  .message p {
+    padding: 12px 18px;
+    border-radius: 18px;
+    display: inline-block;
+    max-width: 75%;
+    word-wrap: break-word;
+    font-size: 15px;
+    line-height: 1.5;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  }
+
+  .message.user p {
+    background: linear-gradient(135deg, #f26522, #ff9248);
+    color: white;
+    text-align: right;
+    border-top-right-radius: 4px;
+  }
+
+  .message.bot p {
+    background: #fff;
+    color: #444;
+    border-top-left-radius: 4px;
+    border: 1px solid rgba(242, 101, 34, 0.1);
+  }
+
+  /* Improved file upload container */
+  .upload-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    padding: 25px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(15px);
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(242, 101, 34, 0.1);
+    width: 80%;
+    max-width: 450px;
+    margin: 25px auto;
+  }
+  
+  .upload-container input {
+    width: 100%;
+    padding: 15px;
+    border: 2px dashed rgba(242, 101, 34, 0.3);
+    background: rgba(242, 101, 34, 0.03);
+    color: #555;
+    text-align: center;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 10px;
+  }
+  
+  .upload-container input:hover {
+    border-color: #f26522;
+    background: rgba(242, 101, 34, 0.05);
+  }
+  
+  .upload-container button {
+    padding: 14px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+    background: linear-gradient(135deg, #f26522, #ff9248);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    box-shadow: 0 5px 15px rgba(242, 101, 34, 0.2);
+  }
+  
+  .upload-container button:hover {
+    background: linear-gradient(135deg, #e05a17, #f78234);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(242, 101, 34, 0.25);
+  }
+  
+  .upload-container button:disabled {
+    background: rgba(200, 200, 200, 0.5);
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+  }
+
+  /* Enhanced input container */
+  .input-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 70%;
+    max-width: 800px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 8px 15px;
+    border-radius: 18px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(242, 101, 34, 0.1);
+  }
+
+  input[type="text"] {
+    flex: 1;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 12px;
+    background: rgba(242, 101, 34, 0.05);
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.03);
+    font-size: 16px;
+    color: #444;
+    transition: all 0.3s ease;
+  }
+
+  input[type="text"]:focus {
+    background: rgba(242, 101, 34, 0.08);
+    outline: none;
+    box-shadow: inset 0 2px 5px rgba(242, 101, 34, 0.1);
+  }
+
+  button {
+    padding: 14px 24px;
+    background: linear-gradient(135deg, #f26522, #ff9248);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(242, 101, 34, 0.2);
+  }
+
+  button:hover {
+    background: linear-gradient(135deg, #e05a17, #f78234);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(242, 101, 34, 0.25);
+  }
+
+  button:disabled {
+    background: linear-gradient(135deg, #d0d0d0, #e0e0e0);
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .chat-history, .input-container {
+      width: 90%;
+    }
+    
+    .news-response ul {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .message p {
+      max-width: 85%;
+      font-size: 14px;
+    }
+    
+    button {
+      padding: 12px 18px;
+      font-size: 15px;
+    }
+  }
+}
