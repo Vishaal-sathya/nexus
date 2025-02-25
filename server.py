@@ -36,10 +36,18 @@ def detect_news_intent(user_message):
     return any(keyword in user_message for keyword in NEWS_KEYWORDS)
 
 
+# def extract_domain(user_message):
+#     user_message = user_message.lower()
+#     """Extracts the domain (e.g., Blockchain, AI) from user message."""
+#     for domain in DATA_JSON.keys():
+#         if re.search(rf"\b{re.escape(domain.lower())}\b", user_message):
+#             return domain
+#     return None
 def extract_domain(user_message):
-    """Extracts the domain (e.g., Blockchain, AI) from user message."""
-    for domain in DATA_JSON.keys():
-        if re.search(rf"\b{re.escape(domain.lower())}\b", user_message):
+    user_message = user_message.lower()
+    """Extracts the domain (e.g., 'Artificial Intelligence') by searching the keys in DATA_JSON."""
+    for keyword, domain in DATA_JSON.items():
+        if re.search(rf"\b{re.escape(keyword.lower())}\b", user_message):
             return domain
     return None
 
